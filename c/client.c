@@ -6,22 +6,28 @@
 #include <string.h>
 #include <arpa/inet.h>
 #include <unistd.h>
+#include <netdb.h>
 
 void Cipher(char *message, char *keyPath);
 
 int main(int argc, char *argv[])
 {
-    if(argc < 4)
+    if(argc < 3)
     {
         printf("Not enough parameters.\n");
     }
     
     int port = atoi(argv[1]);
-    char *domainName = argv[2];
-    char *keyPath = argv[3];
+    //char *domainName = argv[2];
+    char *keyPath = argv[2];
     char message[80] = {0};
 
+    struct hostent* hostent = gethostbyname("crystalcove.eecs.uci.edu");
+    struct in_addr addr;
+    addr.s_addr = *(unsigned long *)hostent->h_addr;
+    printf("IPV4 : %s \n" , inet_ntoa(addr) );
     
+    //I get the address of the server, so what should I do next?
 
     struct sockaddr_in address;
     int sock = 0, valread;
@@ -40,6 +46,7 @@ int main(int argc, char *argv[])
       
     // Convert IPv4 and IPv6 addresses from text to binary form
     if(inet_pton(AF_INET, "127.0.0.1", &serv_addr.sin_addr)<=0) 
+    //if(inet_pton(AF_INET, inet_ntoa(addr), &serv_addr.sin_addr)<=0) 
     {
         printf("\nInvalid address/ Address not supported \n");
         return -1;
