@@ -6,14 +6,20 @@
 #include <string.h>
 #include <unistd.h>
 
-#define PORT 8080
-
 void Decipher(char *message, char *keyPath);
 char* Name(char* message);
 int Compare(char* left, char*right);
 
-int main(int argc, char const *argv[])
+int main(int argc, char *argv[])
 {
+    if(argc < 3)
+    {
+        printf("Not enough parameters.\n");
+    }
+    
+    int port = atoi(argv[1]);
+    char *keyPath = argv[2];
+    
     int server_fd, new_socket, valread;
     struct sockaddr_in address;
     int opt = 1;
@@ -35,7 +41,7 @@ int main(int argc, char const *argv[])
     }
     address.sin_family = AF_INET;
     address.sin_addr.s_addr = INADDR_ANY;
-    address.sin_port = htons( PORT );
+    address.sin_port = htons( port );
       
     // Forcefully attaching socket to the port
     if (bind(server_fd, (struct sockaddr *)&address, sizeof(address))<0)
@@ -59,7 +65,7 @@ int main(int argc, char const *argv[])
         memset(buffer,0,sizeof(buffer));
         valread = read(new_socket , buffer, 1024);
         //printf("%s, %ld\n",buffer, strlen(buffer));
-        Decipher(buffer, "mykey.txt");
+        Decipher(buffer, keyPath);
         //printf("%s, %ld\n",buffer, strlen(buffer));
         char *name = Name(buffer);
         send(new_socket , name , strlen(name) , 0);
