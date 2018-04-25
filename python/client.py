@@ -49,11 +49,11 @@ if __name__ == '__main__':
         while True:
             message = input("Please enter the email you want to search:\n").replace(' ','')
             #print(message)
-            ciphertext = cipher(dictionary, message, sys.argv[1])
+            ciphertext = cipher(dictionary, message, sys.argv[2])
             
             s = socket(AF_INET, SOCK_STREAM)
             try:  
-                s.connect(('localhost', 20000))
+                s.connect(('localhost', int(sys.argv[1])))
             except:
                 print("connect error")
                 sys.exit()

@@ -1,5 +1,6 @@
 from socketserver import BaseRequestHandler, TCPServer
 import simplejson
+import sys
 
 
 '''
@@ -58,5 +59,10 @@ class EchoHandler(BaseRequestHandler):
                 self.request.send(b'unknown')
 
 if __name__ == '__main__':
-    serv = TCPServer(('', 20000), EchoHandler)
-    serv.serve_forever()
+    if (len(sys.argv) < 2):
+        print("Parameter is not completed")
+        sys.exit()
+    else:
+        print(sys.argv)
+        serv = TCPServer(('', int(sys.argv[1])), EchoHandler)
+        serv.serve_forever()
